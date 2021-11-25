@@ -1,5 +1,12 @@
 import { ToastContent, NotValidatedToastProps, ToastOptions, Id } from '../types'
 import { isNum, isStr, TYPE} from '../utils'
+import { ContainerInstance } from '../hooks'
+
+let containers = new Map<ContainerInstance | Id, ContainerInstance>();
+
+function isAnyContainerMounted(){
+  return containers.size > 0 // parameter를 쓰지 않고 전역변수를 사용함. 이 기준을 뭘까
+}
 
 function generateToastId() {
   return Math.random().toString(36).substr(2, 9)
@@ -22,7 +29,11 @@ function mergeOptions(type: string, options?: ToastOptions){
 }
 
 function dispatchToast(content:ToastContent, options: NotValidatedToastProps): Id {
+  if(isAnyContainerMounted()){
+    
+  }else {
 
+  }
 }
 
 const toast = (content: ToastContent, options?: ToastOptions) => { 
