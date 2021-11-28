@@ -1,6 +1,8 @@
 import { ToastContent, NotValidatedToastProps, ToastOptions, Id, ToastContainerProps } from '../types'
+import { eventManager, Event } from './eventManager'
 import { isNum, isStr, TYPE} from '../utils'
 import { ContainerInstance } from '../hooks'
+
 
 interface EnqueuedToast {
   content: ToastContent
@@ -39,15 +41,15 @@ function mergeOptions(type: string, options?: ToastOptions){
 function dispatchToast(content:ToastContent, options: NotValidatedToastProps): Id {
   if(isAnyContainerMounted()){
     // [ ] TO DO
+    eventManager.emit(Event.Show, content, options)
   }else {
     queue.push({ content, options }) 
-    if(lazy && canUseDom){ 
-      /**
-       * 최초에 lazy = true가 되는 시점은 toast.configure인데 얘가 어디서 호출되는지 모르겠다.
-       * 이건 컴포넌트가 lazy mount 일 때만 사용되는듯!
-       */ 
+    // if(lazy && canUseDom){ 
+    //   /**
+    //    * 이건 컴포넌트가 lazy mount 일 때만 사용되는듯!
+    //    */ 
 
-    }
+    // }
   }
 
 }
@@ -62,5 +64,6 @@ toast.configure = (config: ToastContainerProps = {}) => {
   lazy = true
   containerConfig = config
 }
+
 
 export { toast }

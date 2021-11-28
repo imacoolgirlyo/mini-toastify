@@ -25,16 +25,24 @@ export type ToastClassName =
 }) => string)
 | string
 
+export interface ClearWaitingQueueParams {
+  containerId?: Id;
+}
+
 interface CommonOptions {
 
 } 
 
-export interface ToastOptions extends CommonOptions {
+export interface ToastOptions<Data = {}> extends CommonOptions {
   type?: TypeOptions
   toastId?: Id
+  delay?: number
+  updateId?: Id;
+  data?: Data;
 }
 
 export interface ToastProps extends ToastOptions { // ToastProps랑 ToastOptions은 어떤 차이가 있는거지
+  staleId?: Id;
   closeToast: () => void
   deleteToast: () => void
 }
