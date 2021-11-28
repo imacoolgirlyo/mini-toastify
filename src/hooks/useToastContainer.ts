@@ -1,7 +1,8 @@
-import { cloneElement, isValidElement, useEffect } from 'react'
+import { cloneElement, isValidElement, useEffect, useReducer } from 'react'
 import { eventManager, Event } from '../core/eventManager'
 import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps} from '../types'
 import { isFuc, isStr } from '../utils'
+import { ActionType, reducer } from './toastContainerReducer'
 
 export interface ContainerInstance {
   toastKey: number;
@@ -13,6 +14,7 @@ export interface ContainerInstance {
 }
 
 export function useToastContainer(props: ToastContainerProps) {
+  const [toast, dispatch] = useReducer(reducer, [])
 
 
   useEffect(() => {
