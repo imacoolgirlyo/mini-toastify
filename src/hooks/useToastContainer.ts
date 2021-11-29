@@ -3,6 +3,7 @@ import { eventManager, Event } from '../core/eventManager'
 import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps, ToastProps} from '../types'
 import { isFuc, isStr } from '../utils'
 import { ActionType, reducer } from './toastContainerReducer'
+import useKeeper from './useKeeper'
 
 export interface ContainerInstance {
   toastKey: number;
@@ -13,8 +14,11 @@ export interface ContainerInstance {
   getToast: (id: Id) => Toast | null
 }
 
+type CollectionItem = Record<Id, Toast>
+
 export function useToastContainer(props: ToastContainerProps) {
   const [toast, dispatch] = useReducer(reducer, [])
+  const collection = useKeeper<CollectionItem>({})
 
 
   useEffect(() => {
@@ -64,7 +68,13 @@ export function useToastContainer(props: ToastContainerProps) {
     toastProps: ToastProps,
     staleId?: Id){
     const { toastId } = toastProps;
-    // if(staleId) delete collection[staleId]
+
+     if(staleId) delete collection[staleId]
+
+     collection[toastId] = {
+       content,
+       props: toastProps
+     }
 
     dispatch({
       type: ActionType.ADD,
