@@ -42,6 +42,7 @@ export interface ToastOptions<Data = {}> extends CommonOptions {
 }
 
 export interface ToastProps extends ToastOptions { // ToastProps랑 ToastOptions은 어떤 차이가 있는거지
+  toastId: Id
   staleId?: Id;
   closeToast: () => void
   deleteToast: () => void

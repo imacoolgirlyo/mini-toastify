@@ -9,7 +9,7 @@ export const enum ActionType {
 export type State = Array<Id>
 export type Action = 
 | { type: ActionType.ADD, toastId: Id, staleId?: Id }
-| { type: ActionType.REMOVE; toastId: Id}
+| { type: ActionType.REMOVE, toastId?: Id}
 
 export function reducer(state: State, action: Action){
   switch(action.type){

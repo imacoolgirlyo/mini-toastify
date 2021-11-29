@@ -1,6 +1,6 @@
 import { cloneElement, isValidElement, useEffect, useReducer } from 'react'
 import { eventManager, Event } from '../core/eventManager'
-import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps} from '../types'
+import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps, ToastProps} from '../types'
 import { isFuc, isStr } from '../utils'
 import { ActionType, reducer } from './toastContainerReducer'
 
@@ -22,9 +22,9 @@ export function useToastContainer(props: ToastContainerProps) {
     .on(Event.Show, buildToast)
   }, [])
 
-function removeToast(toastId?: Id){
-  dispatchEvent({ type: ActionType.REMOVE, toastId})
-}
+  function removeToast(toastId?: Id){
+    dispatch({ type: ActionType.REMOVE, toastId})
+  }
 
   function buildToast(
     content: ToastContent,
@@ -38,7 +38,10 @@ function removeToast(toastId?: Id){
     const toastProps: ToastProps = {
       toastId,
       updateId,
-      closeToast: closeToast
+      closeToast: closeToast,
+      deleteToast(){
+        // removeFromCollection
+      }
     }
 
 
