@@ -51,7 +51,7 @@ function dispatchToast(content:ToastContent, options: NotValidatedToastProps): I
 
     // }
   }
-
+  return options.toastId
 }
 
 const toast = (content: ToastContent, options?: ToastOptions) => { 

@@ -2,6 +2,8 @@ import 'react-app-polyfill/ie11';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
+import { ToastContainer , toast, } from '../src/index'
+
 const App = () => {
   const handleButtonClick = () => {
     // 아래 toast를 호출하는 함수 실행
