@@ -1,6 +1,6 @@
-import { cloneElement, isValidElement, useEffect, useReducer } from 'react'
+import { cloneElement, isValidElement, ReactElement, useEffect, useReducer } from 'react'
 import { eventManager, Event } from '../core/eventManager'
-import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps, ToastProps} from '../types'
+import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps, ToastProps, ToastPosition} from '../types'
 import { isFuc, isStr } from '../utils'
 import { ActionType, reducer } from './toastContainerReducer'
 import useKeeper from './useKeeper'
@@ -82,5 +82,14 @@ export function useToastContainer(props: ToastContainerProps) {
       staleId
     })
   }
+
+  function getToastToRender<T>(
+    callbackFunc: (position: ToastPosition, toastList: Toast[]) => T){
+    
+    const toastList = Object.keys(collection)
+
+  }
+
+  return { getToastToRender}
 
 }

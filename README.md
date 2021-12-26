@@ -11,3 +11,15 @@
 - 테스트
 - 커스텀 스타일 적용
 - 토스트 메세지 위치 변경
+
+
+## Details
+
+ToastContainer들은 mount 될 때 각각의 collection<RefObject>를 가진다. (useToastContainter 참고)
+
+```ts
+type CollectionItem = Record<Id, Toast>
+const collection = useKeeper<CollectionItem>({})
+```
+
+key를 Id로 하고, value에 보여줄 ToastContent와 ToastProps를 추가한다.

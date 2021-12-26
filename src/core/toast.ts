@@ -1,4 +1,4 @@
-import { ToastContent, NotValidatedToastProps, ToastOptions, Id, ToastContainerProps } from '../types'
+import { ToastContent, NotValidatedToastProps, ToastOptions, Id } from '../types'
 import { eventManager, Event } from './eventManager'
 import { isNum, isStr, TYPE} from '../utils'
 import { ContainerInstance } from '../hooks'
@@ -10,9 +10,9 @@ interface EnqueuedToast {
 }
 
 let containers = new Map<ContainerInstance | Id, ContainerInstance>();
-let containerConfig: ToastContainerProps;
+// let containerConfig: ToastContainerProps;
 let queue: EnqueuedToast[] = []
-let lazy = false;
+// let lazy = false;
 
 function isAnyContainerMounted(){
   return containers.size > 0 // parameter를 쓰지 않고 전역변수를 사용함. 이 기준을 뭘까
@@ -60,10 +60,10 @@ const toast = (content: ToastContent, options?: ToastOptions) => {
   //dispatchToast(content)
 }
 
-toast.configure = (config: ToastContainerProps = {}) => {
-  lazy = true
-  containerConfig = config
-}
+// toast.configure = (config: ToastContainerProps = {}) => {
+//   lazy = true
+//   containerConfig = config
+// }
 
 
 export { toast }

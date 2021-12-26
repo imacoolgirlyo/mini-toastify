@@ -46,6 +46,7 @@ export interface ToastProps extends ToastOptions { // ToastProps랑 ToastOptions
   staleId?: Id;
   closeToast: () => void
   deleteToast: () => void
+  children?: ToastContent
 }
 
 
