@@ -11,53 +11,51 @@ export type ToastPosition =
   | 'bottom-center'
   | 'bottom-left';
 
-
-export type ToastContent = 
-| React.ReactNode
+export type ToastContent = React.ReactNode;
 // | ((props: ToastContentProps) => React.ReactNode)
 
-export type ToastClassName = 
-| ((context?: {
-  type?: TypeOptions
-  defaultClassName?: string
-  position: ToastPosition
-  trl?: boolean
-}) => string)
-| string
+export type ToastClassName =
+  | ((context?: {
+      type?: TypeOptions;
+      defaultClassName?: string;
+      position: ToastPosition;
+      trl?: boolean;
+    }) => string)
+  | string;
 
 export interface ClearWaitingQueueParams {
   containerId?: Id;
 }
 
-interface CommonOptions {
-
-} 
+interface CommonOptions {}
 
 export interface ToastOptions<Data = {}> extends CommonOptions {
-  type?: TypeOptions
-  toastId?: Id
-  delay?: number
+  type?: TypeOptions;
+  toastId?: Id;
+  delay?: number;
   updateId?: Id;
   data?: Data;
 }
 
-export interface ToastProps extends ToastOptions { // ToastProps랑 ToastOptions은 어떤 차이가 있는거지
-  toastId: Id
+export interface ToastProps extends ToastOptions {
+  // ToastProps랑 ToastOptions은 어떤 차이가 있는거지
+  toastId: Id;
   staleId?: Id;
-  closeToast: () => void
-  deleteToast: () => void
-  children?: ToastContent
+  closeToast: () => void;
+  deleteToast: () => void;
+  children?: ToastContent;
+  position: ToastPosition;
 }
 
-
 export interface ToastContainerProps extends CommonOptions {
-  className?: ToastClassName
-  newestOnTop?: boolean
-  style?: React.CSSProperties // inline style 줄 때
-  toastStyle?: React.CSSProperties
-  toastClassName?: ToastClassName
-  enableMultiContainer?: boolean
-  limit?: number
+  className?: ToastClassName;
+  newestOnTop?: boolean;
+  style?: React.CSSProperties; // inline style 줄 때
+  toastStyle?: React.CSSProperties;
+  toastClassName?: ToastClassName;
+  enableMultiContainer?: boolean;
+  limit?: number;
+  position: ToastPosition;
 }
 
 /**
@@ -72,6 +70,6 @@ export interface NotValidatedToastProps extends Partial<ToastProps> {
  */
 
 export interface Toast {
-  content: ToastContent
-  props: ToastProps
+  content: ToastContent;
+  props: ToastProps;
 }

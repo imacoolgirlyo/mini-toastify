@@ -1,95 +1,121 @@
-import { cloneElement, isValidElement, ReactElement, useEffect, useReducer } from 'react'
-import { eventManager, Event } from '../core/eventManager'
-import { ToastContainerProps, Id, Toast, ToastContent, NotValidatedToastProps, ToastProps, ToastPosition} from '../types'
-import { isFuc, isStr } from '../utils'
-import { ActionType, reducer } from './toastContainerReducer'
-import useKeeper from './useKeeper'
+import {
+  cloneElement,
+  isValidElement,
+  ReactElement,
+  useEffect,
+  useReducer,
+} from 'react';
+import { eventManager, Event } from '../core/eventManager';
+import {
+  ToastContainerProps,
+  Id,
+  Toast,
+  ToastContent,
+  NotValidatedToastProps,
+  ToastProps,
+  ToastPosition,
+} from '../types';
+import { isFuc, isStr } from '../utils';
+import { ActionType, reducer } from './toastContainerReducer';
+import useKeeper from './useKeeper';
 
 export interface ContainerInstance {
   toastKey: number;
-  displayedToast: number
-  props: ToastContainerProps
-  containerId?: Id | null
-  isToastActive: (toastId: Id) => boolean
-  getToast: (id: Id) => Toast | null
+  displayedToast: number;
+  props: ToastContainerProps;
+  containerId?: Id | null;
+  isToastActive: (toastId: Id) => boolean;
+  getToast: (id: Id) => Toast | null;
 }
 
-type CollectionItem = Record<Id, Toast>
+type CollectionItem = Record<Id, Toast>;
+type ToastToRender = Partial<Record<ToastPosition, Toast[]>>;
 
-export function useToastContainer(props: ToastContainerProps) {
-  const [toast, dispatch] = useReducer(reducer, [])
-  const collection = useKeeper<CollectionItem>({})
-
+export function useToastContainer (props: ToastContainerProps) {
+  const [toast, dispatch] = useReducer(reducer, []);
+  const collection = useKeeper<CollectionItem>({});
 
   useEffect(() => {
-    eventManager
-    .on(Event.Show, buildToast)
-  }, [])
+    eventManager.on(Event.Show, buildToast);
+  }, []);
 
-  function removeToast(toastId?: Id){
-    dispatch({ type: ActionType.REMOVE, toastId})
+  function removeToast (toastId?: Id) {
+    dispatch({ type: ActionType.REMOVE, toastId });
   }
 
-  function buildToast(
+  function buildToast (
     content: ToastContent,
-    { delay, staleId, ...options } : NotValidatedToastProps
-  ){
-    
-    const { toastId, updateId, data} = options;
-    const closeToast = () => removeToast(toastId)
+    { delay, staleId, ...options }: NotValidatedToastProps
+  ) {
+    const { toastId, updateId, data } = options;
+    const closeToast = () => removeToast(toastId);
     // const { props} = instance;
 
     const toastProps: ToastProps = {
       toastId,
       updateId,
+      position: options.position || props.position,
       closeToast: closeToast,
-      deleteToast(){
+      deleteToast () {
         // removeFromCollection
-      }
-    }
-
+      },
+    };
 
     let toastContent = content;
 
-    if(isValidElement(content) && isStr(content.type)){
+    if (isValidElement(content) && isStr(content.type)) {
       toastContent = cloneElement(content, {
         closeToast,
         toastProps,
-        data
-      })
-    } else if (isFuc(content)){
-      toastContent = content({ closeToast, toastProps, data});
+        data,
+      });
+    } else if (isFuc(content)) {
+      toastContent = content({ closeToast, toastProps, data });
     }
 
-    appendToast(toastContent, toastProps, staleId)
+    appendToast(toastContent, toastProps, staleId);
   }
 
-  function appendToast(content: ToastContent,
+  function appendToast (
+    content: ToastContent,
     toastProps: ToastProps,
-    staleId?: Id){
+    staleId?: Id
+  ) {
     const { toastId } = toastProps;
 
-     if(staleId) delete collection[staleId]
+    if (staleId) delete collection[staleId];
 
-     collection[toastId] = {
-       content,
-       props: toastProps
-     }
+    collection[toastId] = {
+      content,
+      props: toastProps,
+    };
 
     dispatch({
       type: ActionType.ADD,
       toastId,
-      staleId
-    })
+      staleId,
+    });
   }
 
-  function getToastToRender<T>(
-    callbackFunc: (position: ToastPosition, toastList: Toast[]) => T){
-    
-    const toastList = Object.keys(collection)
+  function getToastToRender<T> (
+    callbackFunc: (position: ToastPosition, toastList: Toast[]) => T
+  ) {
+    const toastList = Object.keys(collection);
 
+    const groupByPosition: ToastToRender = {};
+
+    toastList.forEach(toastId => {
+      const toastItem = collection[toastId];
+      const { position } = toastItem.props;
+
+      groupByPosition[position] || (groupByPosition[position] = []);
+      groupByPosition[position]!.push(toastItem);
+    });
+
+    return (Object.keys(groupByPosition) as Array<ToastPosition>).map(
+      position => callbackFunc(position, groupByPosition[position]!)
+    );
   }
 
-  return { getToastToRender}
-
+  return { getToastToRender };
 }
