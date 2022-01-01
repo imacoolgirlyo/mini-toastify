@@ -39,13 +39,38 @@ type Callback =
 
 type TimeoutId = ReturnType<typeof setTimeout>;
 
-export const eventManager = {
+export interface EventManager {
+  list: Map<Event, Callback[]>;
+  emitQueue: Map<Event, TimeoutId[]>;
+  on(event: Event.Show, callback: OnShowCallback): EventManager;
+  on(event: Event.Clear, callback: OnClearCallback): EventManager;
+  cancelEmit(event: Event): EventManager;
+  emit(
+    event: Event.Show,
+    content: React.ReactNode,
+    options: NotValidatedToastProps
+  ): void;
+  emit(event: Event.Clear, id?: string | number): void;
+  emit(event: Event.WillUnmount, containerInstance: ContainerInstance): void;
+}
+
+export const eventManager: EventManager = {
   list: new Map(),
   emitQueue: new Map(),
 
   on (event: Event, callback: Callback) {
     this.list.has(event) || this.list.set(event, []);
     this.list.get(event)!.push(callback);
+    return this;
+  },
+  cancelEmit (event) {
+    const timers = this.emitQueue.get(event);
+
+    if (timers) {
+      timers.forEach(clearTimeout);
+      this.emitQueue.delete(event);
+    }
+
     return this;
   },
   emit (event: Event, ...args: any[]) {

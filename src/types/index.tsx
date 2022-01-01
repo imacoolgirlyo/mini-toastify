@@ -27,7 +27,9 @@ export interface ClearWaitingQueueParams {
   containerId?: Id;
 }
 
-interface CommonOptions {}
+interface CommonOptions {
+  position?: ToastPosition;
+}
 
 export interface ToastOptions<Data = {}> extends CommonOptions {
   type?: TypeOptions;
@@ -55,7 +57,6 @@ export interface ToastContainerProps extends CommonOptions {
   toastClassName?: ToastClassName;
   enableMultiContainer?: boolean;
   limit?: number;
-  position: ToastPosition;
 }
 
 /**

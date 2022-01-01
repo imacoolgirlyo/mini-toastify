@@ -27,3 +27,9 @@ const collection = useKeeper<CollectionItem>({});
 ```
 
 key를 Id로 하고, value에 보여줄 ToastContent와 ToastProps를 추가한다.
+
+## Test 시나리오
+
+### ToastContainer
+
+ToastContainer가 mount 되면 Event.Show가 등록되는지 확인

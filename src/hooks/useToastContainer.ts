@@ -1,9 +1,9 @@
 import {
   cloneElement,
   isValidElement,
-  ReactElement,
   useEffect,
   useReducer,
+  useRef,
 } from 'react';
 import { eventManager, Event } from '../core/eventManager';
 import {
@@ -34,10 +34,38 @@ type ToastToRender = Partial<Record<ToastPosition, Toast[]>>;
 export function useToastContainer (props: ToastContainerProps) {
   const [toast, dispatch] = useReducer(reducer, []);
   const collection = useKeeper<CollectionItem>({});
+  const containerRef = useRef(null);
+  const instance = useKeeper<ContainerInstance>({
+    toastKey: 1,
+    displayedToast: 0,
+    props,
+    containerId: null,
+    isToastActive: isToastActive,
+    getToast: id => collection[id] || null,
+  });
 
   useEffect(() => {
-    eventManager.on(Event.Show, buildToast);
+    eventManager
+      .cancelEmit(Event.WillUnmount)
+      .on(Event.Show, buildToast)
+      .on(
+        Event.Clear,
+        (toastId: Id | undefined) =>
+          containerRef.current && removeToast(toastId)
+      );
+
+    return () => eventManager.emit(Event.WillUnmount, instance);
   }, []);
+
+  useEffect(() => {
+    instance.isToastActive = isToastActive;
+    instance.displayedToast = toast.length;
+    // eventManager.emit
+  }, [toast]);
+
+  function isToastActive (id: Id) {
+    return toast.indexOf(id) !== -1;
+  }
 
   function removeToast (toastId?: Id) {
     dispatch({ type: ActionType.REMOVE, toastId });
@@ -54,7 +82,7 @@ export function useToastContainer (props: ToastContainerProps) {
     const toastProps: ToastProps = {
       toastId,
       updateId,
-      position: options.position || props.position,
+      position: options.position || (props.position as ToastPosition),
       closeToast: closeToast,
       deleteToast () {
         // removeFromCollection
