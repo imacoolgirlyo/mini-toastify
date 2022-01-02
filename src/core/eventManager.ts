@@ -44,12 +44,16 @@ export interface EventManager {
   emitQueue: Map<Event, TimeoutId[]>;
   on(event: Event.Show, callback: OnShowCallback): EventManager;
   on(event: Event.Clear, callback: OnClearCallback): EventManager;
+  on(event: Event.DidMount, callback: onDidMountCallback): EventManager;
+  on(event: Event.WillUnmount, callback: onWillUnmountCallback): EventManager;
+  off(event: Event, callback?: Callback): EventManager;
   cancelEmit(event: Event): EventManager;
   emit(
     event: Event.Show,
     content: React.ReactNode,
     options: NotValidatedToastProps
   ): void;
+  emit(event: Event.DidMount, containerInstance: ContainerInstance): void;
   emit(event: Event.Clear, id?: string | number): void;
   emit(event: Event.WillUnmount, containerInstance: ContainerInstance): void;
 }
@@ -61,6 +65,16 @@ export const eventManager: EventManager = {
   on (event: Event, callback: Callback) {
     this.list.has(event) || this.list.set(event, []);
     this.list.get(event)!.push(callback);
+    return this;
+  },
+  off (event, callback) {
+    if (callback) {
+      const cb = this.list.get(event)!.filter(cb => cb !== callback);
+      this.list.set(event, cb);
+      return this;
+    }
+
+    this.list.delete(event);
     return this;
   },
   cancelEmit (event) {

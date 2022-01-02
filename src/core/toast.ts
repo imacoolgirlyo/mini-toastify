@@ -1,3 +1,4 @@
+import { ContainerInstance } from './../hooks/useToastContainer';
 import {
   ToastContent,
   NotValidatedToastProps,
@@ -6,7 +7,6 @@ import {
 } from '../types';
 import { eventManager, Event } from './eventManager';
 import { isNum, isStr, TYPE } from '../utils';
-import { ContainerInstance } from '../hooks';
 
 interface EnqueuedToast {
   content: ToastContent;
@@ -16,6 +16,7 @@ interface EnqueuedToast {
 let containers = new Map<ContainerInstance | Id, ContainerInstance>();
 // let containerConfig: ToastContainerProps;
 let queue: EnqueuedToast[] = [];
+let latestInstance: ContainerInstance | Id;
 // let lazy = false;
 
 function isAnyContainerMounted () {
@@ -71,5 +72,24 @@ const toast = (content: ToastContent, options?: ToastOptions) => {
 //   lazy = true
 //   containerConfig = config
 // }
+
+eventManager
+  .on(Event.DidMount, (containerInstance: ContainerInstance) => {
+    latestInstance = containerInstance.containerId || containerInstance;
+    containers.set(latestInstance, containerInstance);
+
+    queue.forEach(item => {
+      eventManager.emit(Event.Show, item.content, item.options);
+    });
+
+    queue = [];
+  })
+  .on(Event.WillUnmount, (containerInstance: ContainerInstance) => {
+    containers.delete(containerInstance.containerId || containerInstance);
+    if (containers.size === 0) {
+      eventManager.off(Event.Show);
+      eventManager.off(Event.Clear);
+    }
+  });
 
 export { toast };

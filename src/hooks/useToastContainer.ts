@@ -45,6 +45,7 @@ export function useToastContainer (props: ToastContainerProps) {
   });
 
   useEffect(() => {
+    instance.containerId = props.containerId;
     eventManager
       .cancelEmit(Event.WillUnmount)
       .on(Event.Show, buildToast)
@@ -52,9 +53,12 @@ export function useToastContainer (props: ToastContainerProps) {
         Event.Clear,
         (toastId: Id | undefined) =>
           containerRef.current && removeToast(toastId)
-      );
+      )
+      .emit(Event.DidMount, instance);
 
-    return () => eventManager.emit(Event.WillUnmount, instance);
+    return () => {
+      return eventManager.emit(Event.WillUnmount, instance);
+    };
   }, []);
 
   useEffect(() => {
@@ -62,6 +66,10 @@ export function useToastContainer (props: ToastContainerProps) {
     instance.displayedToast = toast.length;
     // eventManager.emit
   }, [toast]);
+
+  useEffect(() => {
+    instance.props = props;
+  });
 
   function isToastActive (id: Id) {
     return toast.indexOf(id) !== -1;

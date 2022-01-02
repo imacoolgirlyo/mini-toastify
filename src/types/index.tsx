@@ -29,6 +29,7 @@ export interface ClearWaitingQueueParams {
 
 interface CommonOptions {
   position?: ToastPosition;
+  containerId?: Id;
 }
 
 export interface ToastOptions<Data = {}> extends CommonOptions {

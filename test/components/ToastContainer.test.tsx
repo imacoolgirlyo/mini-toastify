@@ -3,6 +3,7 @@ import { render } from '@testing-library/react';
 
 import { ToastContainer } from '../../src/components/ToastContainer';
 import { Event, eventManager } from '../../src/core/eventManager';
+import '../../src/core/toast';
 
 jest.useFakeTimers();
 
