@@ -40,3 +40,14 @@ const collection = useKeeper<CollectionItem>({});
 
 동적으로 조건에 따라 className을 만들어주기 위해 [clsx](https://www.npmjs.com/package/clsx) 라는 모듈을 사용했다. syntax를 이해하기 어렵지 않으나
 가독성이 좀 떨어져보이긴한다. 기능이 많지 않아서 그런지 라이브러리 자체가 매우 경량(228B)이다.
+
+### Transition Effects
+
+Toast가 화면에 보여질 때, '통(Bounce)' 하고 나타나는 애니메이션 효과를 줄 수 있다.
+
+1. Toast UI가 만들어지고 난 직후 (useLayoutEffect)에 의해 애니메이션 className이 추가된다.
+2. onEnter 가 실행되고 난 후 'animationEnd' 이벤트 리스너를 붙여 `onEntered`가 실행된다.
+3. `onEntered` 에서는 className을 초기 className으로 변경하는 역할을 한다.
+4. useEffect에 의해 Toast가 inActive 상태 일 때, `onExit` 함수가 실행되어 exit animation을 실행한다.
+
+(wip) transition을 만들어내기 위해 필요한 cssTransition props와 ToastTransition props가 따로 있기도 하고 ToastView에서 전달해줘야 하는 props도 있어서 복잡하다.
