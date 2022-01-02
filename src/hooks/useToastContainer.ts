@@ -83,6 +83,7 @@ export function useToastContainer (props: ToastContainerProps) {
     content: ToastContent,
     { delay, staleId, ...options }: NotValidatedToastProps
   ) {
+    console.log('toast triggered', content);
     const { toastId, updateId, data } = options;
     const closeToast = () => removeToast(toastId);
     // const { props} = instance;

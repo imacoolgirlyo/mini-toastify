@@ -15,10 +15,6 @@ const App = () => {
     <div>
       <button onClick={handleButtonClick}>Show me the Toast!</button>
       <ToastContainer />
-      {/* <ToastContainer // 이 Container는 어떤 값을 props로 전달받아야 할까?
-        styles={}
-        
-      /> */}
     </div>
   );
 };

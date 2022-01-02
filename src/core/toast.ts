@@ -49,7 +49,6 @@ function dispatchToast (
   options: NotValidatedToastProps
 ): Id {
   if (isAnyContainerMounted()) {
-    // [ ] TO DO
     eventManager.emit(Event.Show, content, options);
   } else {
     queue.push({ content, options });
