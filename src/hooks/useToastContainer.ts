@@ -154,5 +154,5 @@ export function useToastContainer (props: ToastContainerProps) {
     );
   }
 
-  return { getToastToRender };
+  return { getToastToRender, isToastActive };
 }

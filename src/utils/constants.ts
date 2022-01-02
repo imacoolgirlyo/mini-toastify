@@ -25,3 +25,10 @@ export const POSITION: { [key in KeyOfPosition]: ToastPosition } = {
   BOTTOM_RIGHT: 'bottom-right',
   BOTTOM_CENTER: 'bottom-center',
 };
+
+export const enum Default {
+  COLLAPSE_DURATION = 300,
+  DEBOUNCE_DURATION = 50,
+  CSS_NAMESPACE = 'Toastify',
+  DRAGGABLE_PERCENT = 80,
+}

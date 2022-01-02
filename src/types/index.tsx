@@ -42,10 +42,12 @@ export interface ToastOptions<Data = {}> extends CommonOptions {
   delay?: number;
   updateId?: Id;
   data?: Data;
+  transition?: ToastTransition;
 }
 
 export interface ToastProps extends ToastOptions {
   // ToastProps랑 ToastOptions은 어떤 차이가 있는거지
+  isIn: boolean;
   toastId: Id;
   staleId?: Id;
   closeToast: () => void;

@@ -3,6 +3,7 @@ import { useToastContainer } from '../hooks';
 import { Toast, ToastContainerProps } from '../types';
 import { POSITION } from '../utils';
 import ToastView from './ToastView';
+import { Bounce } from './Transition';
 
 /**
  * @param props
@@ -10,7 +11,7 @@ import ToastView from './ToastView';
  */
 
 export const ToastContainer: React.FC<ToastContainerProps> = props => {
-  const { getToastToRender } = useToastContainer(props);
+  const { getToastToRender, isToastActive } = useToastContainer(props);
   return (
     <div>
       {getToastToRender((position, toastList) => {
@@ -18,7 +19,11 @@ export const ToastContainer: React.FC<ToastContainerProps> = props => {
           <div>
             {toastList.map((toast: Toast) => {
               return (
-                <ToastView key={`${position}`} {...toast.props}>
+                <ToastView
+                  key={`${position}`}
+                  {...toast.props}
+                  isIn={isToastActive(toast.props.toastId)}
+                >
                   {toast.content}
                 </ToastView>
               );

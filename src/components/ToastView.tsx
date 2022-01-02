@@ -2,7 +2,7 @@ import React from 'react';
 import { ToastProps } from '../types';
 
 const ToastView: React.FC<ToastProps> = props => {
-  const { position } = props;
+  const { position, isIn } = props;
 
   return (
     <Transition position={position}>
