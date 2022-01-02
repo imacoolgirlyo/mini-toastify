@@ -14,6 +14,10 @@ export type ToastPosition =
 export type ToastContent = React.ReactNode;
 // | ((props: ToastContentProps) => React.ReactNode)
 
+export type ToastTransition =
+  | React.FC<ToastTransitionProps>
+  | React.ComponentClass<ToastTransitionProps>;
+
 export type ToastClassName =
   | ((context?: {
       type?: TypeOptions;
@@ -48,6 +52,7 @@ export interface ToastProps extends ToastOptions {
   deleteToast: () => void;
   children?: ToastContent;
   position: ToastPosition;
+  transition: ToastTransition;
 }
 
 export interface ToastContainerProps extends CommonOptions {
@@ -65,6 +70,15 @@ export interface ToastContainerProps extends CommonOptions {
  */
 export interface NotValidatedToastProps extends Partial<ToastProps> {
   toastId: Id;
+}
+
+export interface ToastTransitionProps {
+  isIn: boolean;
+  done: () => void;
+  position: ToastPosition | string;
+  preventExitTransition: boolean;
+  nodeRef: React.RefObject<HTMLElement>;
+  children?: React.ReactNode;
 }
 
 /**

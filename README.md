@@ -35,3 +35,8 @@ const collection = useKeeper<CollectionItem>({});
 실질적으로 ToastContainer DidMount시에는 Event.Show가 emit 된다. `core/toast` 제일 하단에서 Event.DidMount 이벤트를 기다리는 on 함수를 등록시켰다.
 
 - 테스트 코드를 적으려하니 아무리 실행해도 통과가 안되길래 살펴봤더니 toast 파일을 import 하지 않아서 Event.DidMount 이벤트 자체가 등록되지 않았었다. 암튼 새로운 방식..
+
+## Styles
+
+동적으로 조건에 따라 className을 만들어주기 위해 [clsx](https://www.npmjs.com/package/clsx) 라는 모듈을 사용했다. syntax를 이해하기 어렵지 않으나
+가독성이 좀 떨어져보이긴한다. 기능이 많지 않아서 그런지 라이브러리 자체가 매우 경량(228B)이다.

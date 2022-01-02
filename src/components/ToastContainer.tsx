@@ -1,6 +1,7 @@
 import React from 'react';
 import { useToastContainer } from '../hooks';
 import { Toast, ToastContainerProps } from '../types';
+import { POSITION } from '../utils';
 import ToastView from './ToastView';
 
 /**
@@ -27,4 +28,9 @@ export const ToastContainer: React.FC<ToastContainerProps> = props => {
       })}
     </div>
   );
+};
+
+ToastContainer.defaultProps = {
+  position: POSITION.BOTTOM_LEFT,
+  transition: Bounce,
 };

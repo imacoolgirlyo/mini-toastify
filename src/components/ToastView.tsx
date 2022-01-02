@@ -1,12 +1,14 @@
-import React from 'react'
-import { ToastProps } from '../types'
+import React from 'react';
+import { ToastProps } from '../types';
 
-const ToastView: React.FC<ToastProps> = ({ children}) => {
+const ToastView: React.FC<ToastProps> = props => {
+  const { position } = props;
+
   return (
-    <div>
-      {children}
-    </div>
-  )
-}
+    <Transition position={position}>
+      <div>{props.children}</div>;
+    </Transition>
+  );
+};
 
-export default ToastView
+export default ToastView;
