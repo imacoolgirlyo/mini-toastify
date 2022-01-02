@@ -26,10 +26,12 @@ type CollectionItem = Record<Id, Toast>;
 const collection = useKeeper<CollectionItem>({});
 ```
 
-key를 Id로 하고, value에 보여줄 ToastContent와 ToastProps를 추가한다.
-
 ## Test 시나리오
 
 ### ToastContainer
 
-ToastContainer가 mount 되면 Event.Show가 등록되는지 확인
+1. ToastContainer가 mount 되면 Event.Show가 등록되는지 확인
+
+실질적으로 ToastContainer DidMount시에는 Event.Show가 emit 된다. `core/toast` 제일 하단에서 Event.DidMount 이벤트를 기다리는 on 함수를 등록시켰다.
+
+- 테스트 코드를 적으려하니 아무리 실행해도 통과가 안되길래 살펴봤더니 toast 파일을 import 하지 않아서 Event.DidMount 이벤트 자체가 등록되지 않았었다. 암튼 새로운 방식..
