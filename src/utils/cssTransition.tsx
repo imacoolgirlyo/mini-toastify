@@ -1,13 +1,13 @@
 import React, { useEffect, useLayoutEffect, useRef } from 'react';
 import { ToastTransitionProps } from '../types';
-import { Default } from './constants';
+// import { Default } from './constants';
 
 export interface CSSTransitionProps {
   enter: string;
   exit: string;
   appendPosition?: boolean;
-  collapse?: boolean;
-  collapseDuration?: number;
+  // collapse?: boolean;
+  // collapseDuration?: number;
 }
 
 const enum AnimationStep {
@@ -19,13 +19,13 @@ export function cssTransition ({
   enter,
   exit,
   appendPosition = false,
-  collapse = true,
-  collapseDuration = Default.COLLAPSE_DURATION,
+  // collapse = true,
+  // collapseDuration = Default.COLLAPSE_DURATION,
 }: CSSTransitionProps) {
   return function ToastTransition ({
     children,
     position,
-    preventExitTransition,
+    // preventExitTransition,
     nodeRef, // toastRef
     isIn,
     done,
@@ -40,7 +40,8 @@ export function cssTransition ({
     }, []);
 
     useEffect(() => {
-      if (!isIn) preventExitTransition ? onExited() : onExit();
+      // if (!isIn) preventExitTransition ? onExited() : onExit();
+      if(!isIn) onExit()
     }, [isIn]);
 
     function onEnter () {

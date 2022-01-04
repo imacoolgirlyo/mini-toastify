@@ -34,6 +34,7 @@ export interface ClearWaitingQueueParams {
 interface CommonOptions {
   position?: ToastPosition;
   containerId?: Id;
+  transition?: ToastTransition;
 }
 
 export interface ToastOptions<Data = {}> extends CommonOptions {
@@ -42,7 +43,7 @@ export interface ToastOptions<Data = {}> extends CommonOptions {
   delay?: number;
   updateId?: Id;
   data?: Data;
-  transition?: ToastTransition;
+  
 }
 
 export interface ToastProps extends ToastOptions {
@@ -78,7 +79,7 @@ export interface ToastTransitionProps {
   isIn: boolean;
   done: () => void;
   position: ToastPosition | string;
-  preventExitTransition: boolean;
+  preventExitTransition?: boolean;
   nodeRef: React.RefObject<HTMLElement>;
   children?: React.ReactNode;
 }

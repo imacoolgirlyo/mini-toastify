@@ -14,11 +14,17 @@ import {
   NotValidatedToastProps,
   ToastProps,
   ToastPosition,
+  ToastTransition,
 } from '../types';
-import { isFuc, isStr } from '../utils';
+import { isFuc, isStr, isToastValid } from '../utils';
 import { ActionType, reducer } from './toastContainerReducer';
 import useKeeper from './useKeeper';
 
+interface QueuedToast {
+  toastContent: ToastContent
+  toastProps: ToastProps
+  staleId?: Id
+}
 export interface ContainerInstance {
   toastKey: number;
   displayedToast: number;
@@ -32,8 +38,11 @@ type CollectionItem = Record<Id, Toast>;
 type ToastToRender = Partial<Record<ToastPosition, Toast[]>>;
 
 export function useToastContainer (props: ToastContainerProps) {
+  const [, forceUpdate] = useReducer(x => x + 1, 0)
   const [toast, dispatch] = useReducer(reducer, []);
   const collection = useKeeper<CollectionItem>({});
+  let toastCount = useKeeper(0)
+  let queue = useKeeper<QueuedToast[]>([]); // Queue에는 대기타고 있는 toast들 (limit이 걸려있는데 limit보다 많은 요청이 들어온 경우)
   const containerRef = useRef(null);
   const instance = useKeeper<ContainerInstance>({
     toastKey: 1,
@@ -87,14 +96,19 @@ export function useToastContainer (props: ToastContainerProps) {
     const { toastId, updateId, data } = options;
     const closeToast = () => removeToast(toastId);
     // const { props} = instance;
+    const isNotAnUpdate = options.updateId === null
+
+    if(isNotAnUpdate) toastCount++
 
     const toastProps: ToastProps = {
       toastId,
       updateId,
       position: options.position || (props.position as ToastPosition),
+      isIn: false,
+      transition: options.transition || (props.transition as ToastTransition),
       closeToast: closeToast,
       deleteToast () {
-        // removeFromCollection
+        removeFromCollection(toastId)
       },
     };
 
@@ -112,6 +126,21 @@ export function useToastContainer (props: ToastContainerProps) {
 
     appendToast(toastContent, toastProps, staleId);
   }
+
+  function removeFromCollection(toastId: Id){
+    delete collection[toastId]
+    const queueLen = queue.length
+    toastCount = isToastValid(toastId)
+    ? toastCount - 1
+    : toastCount - instance.displayedToast
+    
+    if(toastCount < 0) toastCount = 0 
+
+    if(queueLen > 0){
+      // queue에 들어간 애들 처리하는 로직
+    }else {
+      forceUpdate()
+    }}
 
   function appendToast (
     content: ToastContent,

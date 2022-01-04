@@ -15,9 +15,13 @@
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
     "lint": "tsdx lint",
-    "prepare": "tsdx build",
+    "prepare": "tsdx build && npm run style",
     "size": "size-limit",
-    "analyze": "size-limit --why"
+    "analyze": "size-limit --why",
+    "sass": "sass scss/main.scss dist/ReactToastify.css",
+    "sass-minimal": "sass scss/minimal.scss dist/ReactToastify.minimal.css",
+    "style": "npm run sass && npm run sass-minimal && cssnano dist/ReactToastify.css dist/ReactToastify.min.css --no-zindex --no-reduceIdents && npm run style-injector",
+    "style-injector": "style2js --out-dir dist dist/ReactToastify.min.css"
   },
   "peerDependencies": {
     "react": ">=16"
@@ -52,12 +56,18 @@
     "@types/jest": "^27.0.3",
     "@types/react": "^17.0.36",
     "@types/react-dom": "^17.0.11",
+    "cssnano": "^5.0.14",
+    "cssnano-cli": "^1.0.5",
     "husky": "^7.0.4",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "sass": "^1.45.2",
     "size-limit": "^7.0.3",
     "tsdx": "^0.14.1",
     "tslib": "^2.3.1",
     "typescript": "^4.5.2"
+  },
+  "dependencies": {
+    "style2js": "^1.0.0"
   }
 }
