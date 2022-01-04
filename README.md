@@ -51,3 +51,6 @@ Toast가 화면에 보여질 때, '통(Bounce)' 하고 나타나는 애니메이
 4. useEffect에 의해 Toast가 inActive 상태 일 때, `onExit` 함수가 실행되어 exit animation을 실행한다.
 
 (wip) transition을 만들어내기 위해 필요한 cssTransition props와 ToastTransition props가 따로 있기도 하고 ToastView에서 전달해줘야 하는 props도 있어서 복잡하다.
+
+[1/4 일지] 
+animation에 필요한 scss들을 추가했는데, style 코드 빌드에 실패해서 animation을 확인 해 볼 수가 없네. 왜 실패하는 걸까
